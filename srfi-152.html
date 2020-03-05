@@ -120,7 +120,7 @@
            a.draft { color: red; }
     </style>
 
-    <style type="text/css" media=all>
+    <style type="text/css" media="all">
            /* Nastiness: Here, I'm using a bug to work around a bug.
            ** Netscape rendering bugs mean you need bogus <dt> and <dd>
            ** margin settings — settings which screw up IE's proper rendering.
@@ -160,7 +160,7 @@
 <!--========================================================================-->
 <H1>Title</H1>
 
-<div class=title-string>String Library (reduced)</div>
+<div class="title-string">String Library (reduced)</div>
 
 <!--========================================================================-->
 <H1>Author</H1>
@@ -184,7 +184,7 @@ John Cowan
 
 <h1>Table of contents</h1>
 
-<ul id=toc-table>
+<ul id="toc-table">
 <li><a href="#Abstract">Abstract</a></li>
 <li><a href="#ProcedureIndex">Procedure index</a></li>
 <li><a href="#Rationale">Rationale</a></li>
@@ -226,7 +226,7 @@ R7RS-small string procedures.  </p>
 <h1><a name="ProcedureIndex">Procedure Index</a></h1>
 <p>
 Here is a list of the procedures provided by this SRFI:
-<div class=indent>
+<div class="indent">
 <dl>
 
 <dt class="proc-index"> Predicates</dt>
@@ -525,7 +525,7 @@ In the following procedure specifications:
     <li>An <var>obj</var> argument may be any value at all.</li>
 </ul>
 
-<p class=continue>
+<p class="continue">
 It is an error to pass values that violate the specification above.
 </p>
 
@@ -538,6 +538,7 @@ brackets as well. So, for example, the procedure with signature
 <pre class="code-example">
 halts? <var>f [x init-store]</var> → <var>[boolean integer]</var>
 </pre>
+<p>
 would take one (<var>f</var>), two (<var>f</var>, <var>x</var>) 
 or three (<var>f</var>, <var>x</var>, <var>init-store</var>) input arguments, 
 and return two values, a boolean and an integer.
@@ -554,7 +555,7 @@ while the procedure with signature
 <pre class="code-example">
 spell-check <var>doc dict<sub>1</sub> dict<sub>2</sub> ...</var> → <var>string-list</var>
 </pre>
-takes two required arguments 
+<p>takes two required arguments 
 (<var>doc</var> and <var>dict<sub>1</sub></var>) 
 and zero or more optional arguments (<var>dict<sub>2</sub> ...</var>).
 </p>
@@ -705,7 +706,7 @@ This is a fundamental constructor for strings.
 <ul>
 <li> <var>successor</var> is used to generate a series of "seed"
     values from the initial seed:
-<div class=inset>
+<div class="inset">
     <var>seed</var>, (<var>successor</var> <var>seed</var>),
     (<var>successor<sup>2</sup></var> <var>seed</var>),
     (<var>successor<sup>3</sup></var> <var>seed</var>), ...
@@ -870,7 +871,7 @@ by <code>string-unfold</code> to be limited by limits on stack size.
     This is a common idiom in the epilogue of string-processing loops
     that accumulate their result using a list in reverse order.
     (See also
-<code>string-concatenate-reverse</code> for the "chunked" variant.)</dd>
+<code>string-concatenate-reverse</code> for the "chunked" variant.)
 
 
 <!--========================================================================-->
@@ -1010,7 +1011,6 @@ by <code>string-unfold</code> to be limited by limits on stack size.
     over all characters on the left side / on the right side /
     on both sides that satisfy the second argument <var>pred</var>:
     <var>pred</var> defaults to <code>char-whitespace?</code>.
-  </p>
 <pre class="code-example">
 (string-trim-both "  The outlook wasn't brilliant,  \n\r")
     => "The outlook wasn't brilliant,"
@@ -1349,13 +1349,13 @@ This indicates a useful value is returned when there is a match.
 <!--
 ==== string-take-while string-take-while-right
 ============================================================================-->
-<dt class=proc-def1>
+<dt class="proc-def1">
 <a name="string-take-while"></a>
 <a name="string-take-while-right"></a>
-<code class=proc-def>string-take-while&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><var> string pred [start end] → string</var>
-<dt class=proc-defn>
-<code class=proc-def>string-take-while-right&nbsp;</code><var> string pred [start end] → string</var>
-<dd class=proc-def>
+<code class="proc-def">string-take-while&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><var> string pred [start end] → string</var>
+<dt class="proc-defn">
+<code class="proc-def">string-take-while-right&nbsp;</code><var> string pred [start end] → string</var>
+<dd class="proc-def">
 
 Returns the longest initial prefix/suffix of the substring of <var>string</var>
 specified by <var>start</var> and <var>end</var> whose elements all
@@ -1366,13 +1366,13 @@ satisfy the predicate <var>pred</var>.
 <!--
 ==== string-drop-while string-drop-while-right
 ============================================================================-->
-<dt class=proc-def1>
+<dt class="proc-def1">
 <a name="string-drop-while"></a>
 <a name="string-drop-while-right"></a>
-<code class=proc-def>string-drop-while&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><var> string pred [start end] → string</var>
-<dt class=proc-defn>
-<code class=proc-def>string-drop-while-right&nbsp;</code><var> string pred [start end] → string</var>
-<dd class=proc-def>
+<code class="proc-def">string-drop-while&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</code><var> string pred [start end] → string</var>
+<dt class="proc-defn">
+<code class="proc-def">string-drop-while-right&nbsp;</code><var> string pred [start end] → string</var>
+<dd class="proc-def">
 Drops the longest initial prefix/suffix of the substring of <var>string</var> 
 specified by <var>start</var> and <var>end</var> whose elements all
 satisfy the predicate <var>pred</var>, and returns the rest of the string.
@@ -1384,13 +1384,13 @@ but with a different order of arguments.  (Not SRFI 13 procedures.)
 <!--
 ==== string-span string-break
 ============================================================================-->
-<dt class=proc-def1>
+<dt class="proc-def1">
 <a name="string-span"></a>
-<code class=proc-def>string-span&nbsp;&nbsp;</code><var> string pred [start end] → [string string]</var>
-<dt class=proc-defn>
+<code class="proc-def">string-span&nbsp;&nbsp;</code><var> string pred [start end] → [string string]</var>
+<dt class="proc-defn">
 <a name="string-break"></a>
-<code class=proc-def>string-break&nbsp;</code><var> string pred [start end] → [string string]</var>
-<dd class=proc-def>
+<code class="proc-def">string-break&nbsp;</code><var> string pred [start end] → [string string]</var>
+<dd class="proc-def">
 
 <code>String-span</code> splits the substring of <var>string</var>
 specified by <var>start</var> and <var>end</var>
@@ -1411,11 +1411,10 @@ and <code>break</code> breaks the string at the first element satisfying
 <p>
 <code>String-span</code> is equivalent to 
 </p>
-<pre class=code-example>
+<pre class="code-example">
 (values (string-take-while <var>pred</var> <var>string</var>) 
         (string-drop-while <var>pred</var> <var>string</var>))</pre>
 </dd>
-</pre>
 </dl>
 
 
@@ -1795,7 +1794,7 @@ Example:
         <code>string-delete</code>.
         This is inconsistent with SRFI 1 and other SRFIs.
 
-</dd>
+</dd></dl>
 
 <!--========================================================================-->
 <h3><a name="ReplicationSplitting">Replication and splitting</a></h3>
@@ -1944,6 +1943,7 @@ use SRFI 115's <code>regexp-split</code> procedure.
 <!--
 ==== read-string
 ============================================================================-->
+<dl>
 <dt class="proc-def">
 <a name="read-string"></a>
 <code class="proc-def">read-string</code><var> k [port] → string</var> (R7RS-small)
@@ -1973,6 +1973,7 @@ The default port is the value of <code>(current-output-port)</code>.</dd>
 <!--
 ==== string-set!
 ============================================================================-->
+<dl>
 <dt class="proc-def">
 <a name="string-set!"></a>
 <code class="proc-def">string-set!</code><var> string k char → unspecified</var> (R5RS)
@@ -1980,8 +1981,6 @@ The default port is the value of <code>(current-output-port)</code>.</dd>
 <dd class="proc-def">
    The string-set! procedure stores <var>char</var> in element <var>k</var> of <var>string</var>.
 </dd>
-
-</dl>
 
 <!--
 ==== string-fill!
@@ -2062,7 +2061,7 @@ module as follows:</p>
   string->list string-fill!))
 </pre>
 
-The other modules, if imported, must be restricted in the same way as shown above.
+<p>The other modules, if imported, must be restricted in the same way as shown above.
 </p>
 
 <p>The R7RS library assumes the presence of all R7RS-small procedures and
