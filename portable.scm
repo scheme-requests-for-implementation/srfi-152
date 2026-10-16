@@ -222,13 +222,8 @@
 ;    (string-copy! ans 0 base)
 ;    ans))
 
-;;; The strategy is to allocate a series of chunks into which we stash the
-;;; chars as we generate them. Chunk size goes up in powers of two starting
-;;; with 40 and levelling out at 4k, i.e.
-;;;     40 40 80 160 320 640 1280 2560 4096 4096 4096 4096 4096...
-;;; This should work pretty well for short strings, 1-line (80 char) strings,
-;;; and longer ones. When done, we allocate an answer string and copy the
-;;; chars over from the chunk buffers.
+;;; These aren't especially efficient, but they support the SRFI 152
+;;; extensions to the string unfolders and should be continuation-safe.
 
 (define (string-unfold p f g seed . base+make-final)
   (check-arg procedure? p string-unfold)
@@ -237,94 +232,46 @@
   (let-optionals* base+make-final
                   ((base       ""              (string? base))
 		   (make-final (lambda (x) "") (procedure? make-final)))
-    (let lp ((chunks '())		; Previously filled chunks
-	     (nchars 0)			; Number of chars in CHUNKS
-	     (chunk (make-string 40))	; Current chunk into which we write
-	     (chunk-len 40)
-	     (i 0)			; Number of chars written into CHUNK
-	     (seed seed))
-      (let lp2 ((i i) (seed seed))
-	(if (not (p seed))
-	    (let ((c (f seed))
-		  (seed (g seed)))
-	      (if (< i chunk-len)
-		  (begin (string-set! chunk i c)
-			 (lp2 (+ i 1) seed))
-
-		  (let* ((nchars2 (+ chunk-len nchars))
-			 (chunk-len2 (min 4096 nchars2))
-			 (new-chunk (make-string chunk-len2)))
-		    (string-set! new-chunk 0 c)
-		    (lp (cons chunk chunks) (+ nchars chunk-len)
-			new-chunk chunk-len2 1 seed))))
-
-	    ;; We're done. Make the answer string & install the bits.
-	    (let* ((final (make-final seed))
-		   (flen (string-length final))
-		   (base-len (string-length base))
-		   (j (+ base-len nchars i))
-		   (ans (make-string (+ j flen))))
-	      (%string-copy! ans j final 0 flen)	; Install FINAL.
-	      (let ((j (- j i)))
-		(%string-copy! ans j chunk 0 i)		; Install CHUNK[0,I).
-		(let lp ((j j) (chunks chunks))		; Install CHUNKS.
-		  (if (pair? chunks)
-		      (let* ((chunk  (car chunks))
-			     (chunks (cdr chunks))
-			     (chunk-len (string-length chunk))
-			     (j (- j chunk-len)))
-			(%string-copy! ans j chunk 0 chunk-len)
-			(lp j chunks)))))
-	      (%string-copy! ans 0 base 0 base-len)	; Install BASE.
-	      ans))))))
+    (let lp ((acc (list base)) (seed seed))
+      (if (p seed)
+          (string-concatenate-reverse
+           acc
+           (let ((x (make-final seed)))
+             (cond ((string? x) x)
+                   ((char? x) (string x))
+                   (else (error "make-final returned an invalid object"
+                                x)))))
+          (let ((x (f seed)))
+            (lp (cons (cond ((char? x) (string x))
+                            ((string? x) x)
+                            (else
+                             (error "mapper returned an invalid object"
+                                    x)))
+                      acc)
+                (g seed)))))))
 
 (define (string-unfold-right p f g seed . base+make-final)
   (let-optionals* base+make-final
                   ((base       ""              (string? base))
 		   (make-final (lambda (x) "") (procedure? make-final)))
-    (let lp ((chunks '())		; Previously filled chunks
-	     (nchars 0)			; Number of chars in CHUNKS
-	     (chunk (make-string 40))	; Current chunk into which we write
-	     (chunk-len 40)
-	     (i 40)			; Number of chars available in CHUNK
-	     (seed seed))
-      (let lp2 ((i i) (seed seed))	; Fill up CHUNK from right
-	(if (not (p seed))		; to left.
-	    (let ((c (f seed))
-		  (seed (g seed)))
-	      (if (> i 0)
-		  (let ((i (- i 1)))
-		    (string-set! chunk i c)
-		    (lp2 i seed))
-
-		  (let* ((nchars2 (+ chunk-len nchars))
-			 (chunk-len2 (min 4096 nchars2))
-			 (new-chunk (make-string chunk-len2))
-			 (i (- chunk-len2 1)))
-		    (string-set! new-chunk i c)
-		    (lp (cons chunk chunks) (+ nchars chunk-len)
-			new-chunk chunk-len2 i seed))))
-
-	    ;; We're done. Make the answer string & install the bits.
-	    (let* ((final (make-final seed))
-		   (flen (string-length final))
-		   (base-len (string-length base))
-		   (chunk-used (- chunk-len i))
-		   (j (+ base-len nchars chunk-used))
-		   (ans (make-string (+ j flen))))
-	      (%string-copy! ans 0 final 0 flen)	; Install FINAL.
-	      (%string-copy! ans flen chunk i chunk-len); Install CHUNK[I,).
-	      (let lp ((j (+ flen chunk-used))		; Install CHUNKS.
-		       (chunks chunks))		
-		  (if (pair? chunks)
-		      (let* ((chunk  (car chunks))
-			     (chunks (cdr chunks))
-			     (chunk-len (string-length chunk)))
-			(%string-copy! ans j chunk 0 chunk-len)
-			(lp (+ j chunk-len) chunks))
-		      (%string-copy! ans j base 0 base-len))); Install BASE.
-	      ans))))))
-
+    (let lp ((acc (list base)) (seed seed))
+      (if (p seed)
+          (string-concatenate
+           (cons (let ((x (make-final seed)))
+                   (cond ((string? x) x)
+                         ((char? x) (string x))
+                         (else
+                          (error "make-final returned an invalid object"
+                                 x))))
+                 acc))
+          (let ((x (f seed)))
+            (lp (cons (cond ((char? x) (string x))
+                            ((string? x) x)
+                            (else
+                             (error "mapper returned an invalid object"
+                                    x)))
+                      acc)
+                (g seed)))))))
 
 (define (string-every criterion s . maybe-start+end)
   (let-string-start+end (start end) string-every s maybe-start+end
