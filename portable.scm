@@ -139,6 +139,21 @@
   (if (and (zero? start) (= end (string-length s))) s
       (substring s start end)))
 
+(define (string-map proc . strings)
+  (let ((min-len (apply min (map string-length strings))))
+    (let lp ((acc '()) (i 0))
+      (if (= i min-len)
+          (string-concatenate-reverse acc)
+          (let* ((cs (map (lambda (s) (string-ref s i)) strings))
+                 (x (apply proc cs)))
+            (lp (cons (cond ((char? x) (string x))
+                            ((string? x) x)
+                            (else
+                             (error "proc returned an invalid object")
+                                    x))
+                      acc)
+                (+ i 1)))))))
+
 ;;; Basic iterators and other higher-order abstractions
 ;;; (string-fold kons knil s [start end])
 ;;; (string-fold-right kons knil s [start end])

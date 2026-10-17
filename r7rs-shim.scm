@@ -47,22 +47,6 @@
           ((< i start) s)
         (string-set! s (- i start) (vector-ref vector i))))))
 
-(define (string-map f x . rest)
-
-  (define (string-map1 f x)
-    (list->string (map f (string->list x))))
-
-  (define (string-map2 f x y)
-    (list->string (map f (string->list x) (string->list y))))
-
-  (define (string-mapn f lists)
-    (list->string (apply map f (map string->list lists))))
-
-  (case (length rest)
-    ((0)  (string-map1 f x))
-    ((1)  (string-map2 f x (car rest)))
-    (else (string-mapn f (cons x rest)))))
-
 (define (string-for-each f s . rest)
 
   (define (for-each1 i n)
