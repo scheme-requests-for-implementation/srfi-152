@@ -24,13 +24,16 @@
                string=? string<? string>? string<=? string>=?
                string-ci=? string-ci<? string-ci>? string-ci<=? string-ci>=?
                string-upcase string-downcase string-foldcase
-               string-append string-map string-for-each
+               string-append string-for-each
                read-string write-string
                string-set! string-fill! string-copy!)
 
   ;; but export comparison predicates extended to 0 and 1 arguments:
   (export string=? string<? string>? string<=? string>=?
           string-ci=? string-ci<? string-ci>? string-ci<=? string-ci>=?)
+
+  ;; Export extended string-map.
+  (export string-map)
 
   ;; Remaining exports, grouped as in the SRFI
   (export string-null? string-every string-any)
