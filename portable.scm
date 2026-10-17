@@ -245,9 +245,10 @@
   (check-arg procedure? f string-unfold)
   (check-arg procedure? g string-unfold)
   (let-optionals* base+make-final
-                  ((base       ""              (string? base))
+                  ((base "" (or (string? base) (char? base)))
 		   (make-final (lambda (x) "") (procedure? make-final)))
-    (let lp ((acc (list base)) (seed seed))
+    (let lp ((acc (list (if (string? base) base (string base))))
+             (seed seed))
       (if (p seed)
           (string-concatenate-reverse
            acc
@@ -267,9 +268,10 @@
 
 (define (string-unfold-right p f g seed . base+make-final)
   (let-optionals* base+make-final
-                  ((base       ""              (string? base))
+                  ((base "" (or (string? base) (char? base)))
 		   (make-final (lambda (x) "") (procedure? make-final)))
-    (let lp ((acc (list base)) (seed seed))
+    (let lp ((acc (list (if (string? base) base (string base))))
+             (seed seed))
       (if (p seed)
           (string-concatenate
            (cons (let ((x (make-final seed)))
