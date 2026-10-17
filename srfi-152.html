@@ -1415,9 +1415,9 @@ that satisfies the predicate.
 
 <p>
 In other words: 
-<code>span</code> finds the initial span of elements 
+<code>string-span</code> finds the initial span of elements
 satisfying <var>pred</var>, 
-and <code>break</code> breaks the string at the first element satisfying 
+and <code>string-break</code> breaks the string at the first element satisfying
 <var>pred</var>.
 
 <p>
@@ -1667,7 +1667,7 @@ The <code>string-fold-right</code> combinator is sometimes called a "catamorphis
 ============================================================================-->
 <dt class="proc-def">
 <a name="string-map"></a>
-<code class="proc-def">string-map</code><var> proc string1 string2 ... → string</var> (R7RS-small)
+<code class="proc-def">string-map</code><var> proc string1 string2 ... → string</var>
 </dt>
 <dd class="proc-def">
 It is an error if <var>proc</var> does not accept as many arguments
