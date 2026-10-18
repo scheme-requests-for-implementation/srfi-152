@@ -41,7 +41,7 @@
 
   ;; Export R7RS procedures (defined in r7rs-shim file and chicken module)
   (import (only utf8 read-string))
-  (export string->vector vector->string string-map string-for-each
+  (export string->vector vector->string string-for-each
           read-string write-string string-copy! write-string)
 
   ;; Remaining exports, grouped as in the SRFI
@@ -61,7 +61,7 @@
           string-break string-span)
   (export string-append string-concatenate string-concatenate-reverse
           string-join)
-  (export string-fold string-fold-right string-count
+  (export string-fold string-fold-right string-map string-count
           string-filter string-remove)
   (export string-replicate string-segment string-split)
 
