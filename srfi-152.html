@@ -183,7 +183,10 @@ John Cowan
   <li>Revised to fix errata:
     <ul>
       <li>2020/3/4 (Add note about accumulation of strings in <code>string-unfold-right</code>.)</li>
-      <li>2024-09-02 (Revised to fix missing argument in <a href="#string-fold">examples</a> of <code>string-fold</code> and <code>string-fold-right</code>.)</li></ul></li>
+      <li>2024-09-02 (Revised to fix missing argument in <a href="#string-fold">examples</a> of <code>string-fold</code> and <code>string-fold-right</code>.)</li>
+      <li>2026-10-18 (<a href="#errata-3.1">Removed misleading R7RS-small tag</a> from <code>string-map</code>.
+<a href="#errata-3.2">Used correct names</a> for procedures.)
+</ul></li>
 </ul>
 
 <h1>Table of contents</h1>
@@ -1415,7 +1418,7 @@ that satisfies the predicate.
 
 <p>
 In other words: 
-<code>string-span</code> finds the initial span of elements
+<code id="errata-3.2">string-span</code> finds the initial span of elements
 satisfying <var>pred</var>, 
 and <code>string-break</code> breaks the string at the first element satisfying
 <var>pred</var>.
@@ -1666,7 +1669,7 @@ The <code>string-fold-right</code> combinator is sometimes called a "catamorphis
 ==== string-map
 ============================================================================-->
 <dt class="proc-def">
-<a name="string-map"></a>
+<a name="string-map" id="errata-3.1"></a>
 <code class="proc-def">string-map</code><var> proc string1 string2 ... → string</var>
 </dt>
 <dd class="proc-def">
